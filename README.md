@@ -1,11 +1,12 @@
 # Gomoku-with-AI-and-GUI
-This is Gomoku Game. AI is implemented byu MiniMax and Alpha-Beta algorithm. GUI is implemented by PyQt/ 
+
+This is the Gomoku Game. AI is implemented by MiniMax and Alpha-Beta algorithm. GUI is implemented by PyQt.
 
 ## How to run
 
-1. Install PyQt
+1. Install PyQt5
 ```
-pip install PyQt==5.15.0
+pip install PyQt5
 ```
 
 2. Run mian.py
@@ -13,3 +14,4 @@ pip install PyQt==5.15.0
 python main.py
 ```
 
+![Demo](./demo.png)

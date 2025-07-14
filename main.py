@@ -34,9 +34,9 @@ class BoardLabel(QLabel):
         if self.isShow:
             # Draw a circle at the position of the last piece
             qp.begin(self)
-            pen = QPen(Qt.yellow, 8, Qt.SolidLine)
+            pen = QPen(Qt.yellow, 4, Qt.SolidLine)
             qp.setPen(pen)
-            rect = QRect(int(self.x-30),int(self.y-10),36,36)
+            rect = QRect(int(self.x-15),int(self.y-5),18,18)
             qp.drawArc(rect,0,360*16)
             qp.end()
         self.update()
@@ -49,18 +49,18 @@ class MainWindow(QWidget):
         super().__init__()
         # Set window properties
         QApplication.setStyle(QStyleFactory.create("Fusion"))
-        self.setWindowTitle("Gobang") 
+        self.setWindowTitle("Gomoku") 
         self.setWindowIcon(QIcon('img/black.png'))
-        self.resize(600, 900)
-        self.setMinimumSize(QtCore.QSize(600, 900))
-        self.setMaximumSize(QtCore.QSize(600, 900))
+        self.resize(300, 450)
+        self.setMinimumSize(QtCore.QSize(300, 450))
+        self.setMaximumSize(QtCore.QSize(300, 450))
         # Background and board images
         self.Back = QLabel(self)
-        self.Back.setGeometry(QRect(0, 0, 600, 900))
+        self.Back.setGeometry(QRect(0, 0, 300, 450))
         self.Back.setPixmap(QPixmap('img/back.jpg'))
         self.Back.setScaledContents(True)
         self.Board = BoardLabel(self)
-        self.Board.setGeometry(QRect(30, 10, 540, 540))
+        self.Board.setGeometry(QRect(15, 5, 270, 270))
         self.Board.setPixmap(QPixmap('img/board.jpg')) 
         self.Board.setScaledContents(True)
         self.Black = QPixmap('img/black.png')
@@ -68,34 +68,34 @@ class MainWindow(QWidget):
         # Set prompt information
         font = QtGui.QFont()
         font.setFamily("楷体")
-        font.setPointSize(16)
+        font.setPointSize(8)
         self.label_1 = QLabel(self)
         self.label_1.setFont(font)
         self.label_1.setAlignment(Qt.AlignCenter)
-        self.label_1.setGeometry(QRect(0,670,150,50))
+        self.label_1.setGeometry(QRect(5,335,75,25))
         self.label_1.setText("Player (Black)")
         self.label_2 = QLabel(self)
         self.label_2.setFont(font)
-        self.label_2.setGeometry(QRect(490,700,150,50))
+        self.label_2.setGeometry(QRect(245,350,75,25))
         self.label_2.setText("AI (White)")
         self.label_3 = QLabel(self)
         self.label_3.setFont(font)
-        self.label_3.setGeometry(QRect(150,570,150,50))
+        self.label_3.setGeometry(QRect(75,285,75,25))
         self.label_3.setText("Black's turn...")
         self.label_4 = QLabel(self)
         self.label_4.setFont(font)
-        self.label_4.setGeometry(QRect(300,570,300,50))
+        self.label_4.setGeometry(QRect(150,285,150,25))
         self.label_4.setText("Board Evaluation:")
         self.opt = QComboBox(self)
-        self.opt.setGeometry(QtCore.QRect(270, 840, 60, 40))
+        self.opt.setGeometry(QtCore.QRect(90, 420, 107, 20))
         self.opt.addItem("Black First")
         self.opt.addItem("White First")
         # Buttons
         self.reset = QPushButton(self)
-        self.reset.setGeometry(QtCore.QRect(50, 840, 200, 40))
+        self.reset.setGeometry(QtCore.QRect(15, 420, 70, 20))
         self.reset.setText("Restart")
         self.retract = QPushButton(self)
-        self.retract.setGeometry(QRect(350, 840, 200, 40))
+        self.retract.setGeometry(QRect(200, 420, 70, 20))
         self.retract.setText("Undo")
         QtCore.QMetaObject.connectSlotsByName(self)
         self.reset.clicked.connect(self.Reset) 
@@ -103,12 +103,12 @@ class MainWindow(QWidget):
         # Show the piece to be placed at the mouse position
         self.MouseFocus = QLabel(self)  # Change mouse image to piece      
         self.MouseFocus.setPixmap(self.Black)  # Load black piece
-        self.MouseFocus.setGeometry(0, 0, 36, 36)
+        self.MouseFocus.setGeometry(0, 0, 18, 18)
         self.MouseFocus.setScaledContents(True)
         self.MouseFocus.raise_()  # Mouse always on top
         # Top layer for tracking mouse    
         self.Trace = QLabel(self)
-        self.Trace.setGeometry(QRect(30, 10, 540, 540))
+        self.Trace.setGeometry(QRect(15, 5, 270, 270))
         self.Trace.setMouseTracking(True)
         self.Back.setMouseTracking(True)
         self.Board.setMouseTracking(True)
@@ -147,7 +147,7 @@ class MainWindow(QWidget):
                 x,y = self.ChessToMouse(i,j)
                 self.chess[i][j].setVisible(False)
                 self.chess[i][j].setScaledContents(True)
-                self.chess[i][j].setGeometry(int(x), int(y), 36, 36)
+                self.chess[i][j].setGeometry(int(x), int(y), 18, 18)
                 self.chess[i][j].setPixmap(QPixmap('img/none.jpg'))
     
     """
@@ -196,8 +196,8 @@ class MainWindow(QWidget):
     Function: Override mouse move event
     """    
     def mouseMoveEvent(self, e):  # Black piece follows mouse movement
-        if e.x()>30 and e.x()<570 and e.y()>10 and e.y()<550:
-            self.MouseFocus.move(e.x() - 18, e.y() - 18) 
+        if e.x()>15 and e.x()<285 and e.y()>5 and e.y()<275:
+            self.MouseFocus.move(e.x() - 9, e.y() - 9) 
             self.MouseFocus.setPixmap(self.Black)  # Load black piece
         else:
             self.MouseFocus.setPixmap(QPixmap('img/none.jpg'))           
@@ -257,15 +257,15 @@ class MainWindow(QWidget):
     Function: Convert board coordinates to window coordinates
     """  
     def ChessToMouse(self, i, j):
-        scale = 500 / 14 # Size of each grid
-        return 50 + j * scale- 18, 30 + i * scale - 18
+        scale = 250 / 14 # Size of each grid
+        return 25 + j * scale- 9, 15 + i * scale - 9
     """
     Args: x, y window coordinates
     Function: Convert window coordinates to board coordinates
     """  
     def MouseToChess(self, x, y):
-        scale = 500 / 14
-        i,j = int(round((y - 30) / scale)) , int(round((x - 50) / scale))
+        scale = 250 / 14
+        i,j = int(round((y - 15) / scale)) , int(round((x - 25) / scale))
         return i,j
     
     """
